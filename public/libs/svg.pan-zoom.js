@@ -39,6 +39,7 @@
             tr.x += diffX;
             tr.y += diffY;
             pz.pan.iPos = pz.pan.fPos;
+            self.node.dispatchEvent(new CustomEvent("pan", e, tr));
             updateMatrix();
         }
 
@@ -60,6 +61,8 @@
             tr.scaleY = tr.scaleX = scale;
             tr.x = x;
             tr.y = y;
+
+            self.node.dispatchEvent(new CustomEvent("zoom", e, tr));
             updateMatrix();
         }
 
