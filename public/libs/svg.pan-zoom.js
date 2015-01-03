@@ -66,29 +66,45 @@
             updateMatrix();
         }
 
-        rect.on(mousewheel, zoom);
-        rect.on("mousedown", function (e) {
-            pz.pan.mousedown = true;
-            pz.pan.iPos = {
-                x: e.clientX,
-                y: e.clientY
-            };
-        }).on("mousemove", function (e) {
-            pz.pan.fPos = {
-                x: e.clientX,
-                y: e.clientY
-            };
-            pan();
-        }).on("mouseup", function (e) {
-            pz.pan.mousedown = false;
-            pz.pan.fPos = {
-                x: e.clientX,
-                y: e.clientY
-            };
-            pan();
-        }).on("mouseleave", function () {
-            pz.pan.mousedown = false;
-        });
+        var EventListeners = {
+            mouse_down: function (e) {
+                pz.pan.mousedown = true;
+                pz.pan.iPos = {
+                    x: e.clientX || e.touches[0].pageX,
+                    y: e.clientY || e.touches[0].pageY
+                };
+            },
+            mouse_up: function (e) {
+                pz.pan.mousedown = false;
+                pz.pan.fPos = {
+                    x: e.clientX || e.touches[0].pageX,
+                    y: e.clientY || e.touches[0].pageY
+                };
+                pan();
+            },
+            mouse_move: function (e) {
+                pz.pan.fPos = {
+                    x: e.clientX || e.touches[0].pageX,
+                    y: e.clientY || e.touches[0].pageY
+                };
+                pan();
+            },
+            mouse_leave: function (e) {
+                pz.pan.mousedown = false;
+            }
+        };
+
+        rect
+          .on(mousewheel, zoom)
+          .on("mousedown", EventListeners.mouse_down)
+          .on("touchstart", EventListeners.mouse_down)
+          .on("mousemove", EventListeners.mouse_move)
+          .on("touchmove", EventListeners.mouse_move)
+          .on("mouseup", EventListeners.mouse_up)
+          .on("touchup", EventListeners.mouse_up)
+          .on("mouseleave", EventListeners.mouse_leave)
+          ;
+
         self.on(mousewheel, zoom);
     }
 
