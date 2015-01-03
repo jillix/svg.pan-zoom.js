@@ -7,11 +7,13 @@
             document.onmousewheel !== undefined ? "mousewheel" :
             "DOMMouseScroll";
 
-    function panZoom() {
+    function panZoom(opt_options) {
         var pz = {
             pan: {}
         };
         var self = this;
+        opt_options = Object(opt_options);
+        opt_options.zoom = opt_options.zoom || [];
         pz.elm = self;
         var svg = self;
         while ((svg = self.parent).node.tagName.toUpperCase() !== "SVG") {}
@@ -57,6 +59,15 @@
             var x = scaleD * (currentX - oX) + oX;
             var y = scaleD * (currentY - oY) + oY;
 
+            if (scale > opt_options.zoom[1]) {
+                scale = opt_options.zoom[1];
+                return;
+            }
+
+            if (scale < opt_options.zoom[0]) {
+                scale = opt_options.zoom[0];
+                return;
+            }
 
             tr.scaleY = tr.scaleX = scale;
             tr.x = x;
