@@ -34,8 +34,8 @@
                 return;
             }
             var tr = pz.transform = self.transform();
-            var diffX = (pz.pan.fPos.x - pz.pan.iPos.x) / (tr.scaleX * 2);
-            var diffY = (pz.pan.fPos.y - pz.pan.iPos.y) / (tr.scaleY * 2);
+            var diffX = (pz.pan.fPos.x - pz.pan.iPos.x) / (tr.scaleX + 1);
+            var diffY = (pz.pan.fPos.y - pz.pan.iPos.y) / (tr.scaleY + 1);
             tr.x += diffX;
             tr.y += diffY;
             pz.pan.iPos = pz.pan.fPos;
