@@ -1,3 +1,13 @@
+/*!
+ * SVG.js Pan Zoom Plugin
+ * ======================
+ *
+ * A JavaScript library for pan and zoom SVG things.
+ * Created with <3 and JavaScript by the jillix developers.
+ *
+ * svg.pan-zoom.js 1.0.0
+ * Licensed under the MIT license.
+ * */
 ;(function() {
 
     var container = null;
@@ -7,23 +17,60 @@
             document.onmousewheel !== undefined ? "mousewheel" :
             "DOMMouseScroll";
 
+    /**
+     * panZoom
+     * The pan-zoom contructor.
+     *
+     * @name panZoom
+     * @function
+     * @param {Object|undefined} opt_options An optional object containing the following fields:
+     *
+     *  - `zoom` (Array): An array of two float values: the minimum and maximum zoom values (default: `undefined`).
+     *
+     * @return {PanZoom} The PanZoom object containing the following fields:
+     *
+     *  - `elm` (SVG): The selected element.
+     *  - `pan` (Object): An object containing pan values.
+     *  - `transform` (Object): An object containing the transform data (`scaleX`, `scaleY`, `x` and `y`).
+     *
+     */
     function panZoom(opt_options) {
-        var pz = {
-            pan: {}
-        };
+
+        // Selected element
         var self = this;
+
+        // Pan zoom object
+        var pz = {
+            pan: {},
+            elm = self
+        };
+
+        // Set options
         opt_options = Object(opt_options);
         opt_options.zoom = opt_options.zoom || [];
-        pz.elm = self;
+
+        // Get the svg document
         var svg = self;
         while ((svg = self.parent).node.tagName.toUpperCase() !== "SVG") {}
+
+        // Create the rectangle
         var rect = new SVG(document.createDocumentFragment()).rect().attr({
             width: svg.width(),
             height: svg.height(),
             fill: "none"
         }).style("pointer-events", "all");
+
+        // Insert the rectangle
         self.parent.node.insertBefore(rect.node, self.node)
 
+        /**
+         * updateMatrix
+         * An internal function called to update the svg matrix.
+         *
+         * @name updateMatrix
+         * @function
+         * @return {undefined}
+         */
         function updateMatrix() {
             self.matrix([
                 pz.transform.scaleX, 0, 0,
@@ -31,6 +78,15 @@
             ].join(","));
         }
 
+        /**
+         * pan
+         * The internal function called for panning.
+         *
+         * @name pan
+         * @function
+         * @param {Event} e The internal listener event.
+         * @return {undefined}
+         */
         function pan(e) {
             if (!pz.pan.mousedown) {
                 return;
@@ -45,6 +101,15 @@
             updateMatrix();
         }
 
+        /*!
+         * zoom
+         * The internal function called for zooming.
+         *
+         * @name zoom
+         * @function
+         * @param {Event} e The internal listener event.
+         * @return {undefined}
+         */
         function zoom (e) {
             var tr = pz.transform = self.transform();
             var d = e.deltaY / 1000
@@ -77,6 +142,7 @@
             updateMatrix();
         }
 
+        // The event listeners
         var EventListeners = {
             mouse_down: function (e) {
                 pz.pan.mousedown = true;
@@ -105,6 +171,7 @@
             }
         };
 
+        // Add event listeners
         rect
           .on(mousewheel, zoom)
           .on("mousedown", EventListeners.mouse_down)
@@ -119,6 +186,7 @@
         self.on(mousewheel, zoom);
     }
 
+    // Extend the SVG.Element with the new function
     SVG.extend(SVG.Element, {
         panZoom: panZoom
     });
