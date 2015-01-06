@@ -42,7 +42,7 @@
         // Pan zoom object
         var pz = {
             pan: {},
-            elm = self
+            elm: self
         };
 
         // Set options
@@ -140,6 +140,7 @@
 
             self.node.dispatchEvent(new CustomEvent("zoom", e, tr));
             updateMatrix();
+            e.preventDefault();
         }
 
         // The event listeners
