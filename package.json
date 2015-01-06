@@ -2,7 +2,7 @@
   "name": "svg.pan.zoom.js",
   "version": "1.0.0",
   "description": "A JavaScript library for panning and zooming SVG things.",
-  "main": "index.js",
+  "main": "src/svg.pan-zoom.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
