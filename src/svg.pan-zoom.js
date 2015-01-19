@@ -63,7 +63,7 @@
         // Insert the rectangle
         self.parent.node.insertBefore(rect.node, self.node)
 
-        /**
+        /*!
          * updateMatrix
          * An internal function called to update the svg matrix.
          *
@@ -81,7 +81,7 @@
             ].join(",")+ ")");
         }
 
-        /**
+        /*!
          * pan
          * The internal function called for panning.
          *
@@ -158,7 +158,7 @@
             e.preventDefault();
         }
 
-        /**
+        /*!
          * mousePos
          * Returns the mouse point coordinates.
          *
