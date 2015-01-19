@@ -73,10 +73,14 @@
          * @return {undefined}
          */
         function updateMatrix() {
-            self.matrix([
-                pz.transform.scaleX, 0, 0,
-                pz.transform.scaleY, pz.transform.x, pz.transform.y
-            ].join(","));
+            // matrix(0.5555555159659709,0,0,0.5555555159659709,190.00000406189127,200.99999785920562)
+            self.attr("transform", "matrix(" + [
+                pz.transform.scaleX,
+                0, 0,
+                pz.transform.scaleY,
+                pz.transform.x,
+                pz.transform.y
+            ].join(",")+ ")");
         }
 
         /**
@@ -93,8 +97,8 @@
                 return;
             }
             var tr = pz.transform = self.transform();
-            var diffX = (pz.pan.fPos.x - pz.pan.iPos.x) / (tr.scaleX + 1);
-            var diffY = (pz.pan.fPos.y - pz.pan.iPos.y) / (tr.scaleY + 1);
+            var diffX = pz.pan.fPos.x - pz.pan.iPos.x;
+            var diffY = pz.pan.fPos.y - pz.pan.iPos.y;
             tr.x += diffX;
             tr.y += diffY;
             pz.pan.iPos = pz.pan.fPos;
@@ -112,19 +116,29 @@
          * @return {undefined}
          */
         function zoom (e) {
+            // Get the relative mouse point
+            var rP = mousePos(e, true);
+            var oX = rP.x;
+            var oY = rP.y;
+
+            // Compute the new scale
+            var d = e.deltaY / 1000;
             var tr = pz.transform = self.transform();
-            var d = e.deltaY / 1000
             var scale = tr.scaleX + d;
-
-            var oX = e.clientX;
-            var oY = e.clientY;
-
+            console.log(rP);
             var scaleD = scale / tr.scaleX;
+
+            // Get the current x, y
             var currentX = tr.x;
             var currentY = tr.y;
-            var x = scaleD * (currentX - oX) + oX;
-            var y = scaleD * (currentY - oY) + oY;
 
+            // Compute the final x, y
+            //var x = scaleD * (currentX - oX) + oX;
+            //var y = scaleD * (currentY - oY) + oY;
+            var x = scaleD * (currentX - oX) + (oX - currentX) * scaleD;
+            var y = scaleD * (currentX - oY) + (oY - current) * scaleD;
+
+            // Handle zoom restrictions
             if (scale > opt_options.zoom[1]) {
                 scale = opt_options.zoom[1];
                 return;
@@ -135,12 +149,15 @@
                 return;
             }
 
+            // Zoom
             tr.scaleY = tr.scaleX = scale;
             tr.x = x;
             tr.y = y;
 
             self.node.dispatchEvent(new CustomEvent("zoom", e, tr));
             updateMatrix();
+
+            // Prevent the default browser behavior
             e.preventDefault();
         }
 
