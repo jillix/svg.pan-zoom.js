@@ -13,9 +13,10 @@
     var container = null;
     var markers = null;
 
-    var mousewheel = "onwheel" in document.createElement("div") ? "wheel" :
-            document.onmousewheel !== undefined ? "mousewheel" :
-            "DOMMouseScroll";
+    var mousewheel = "onwheel" in document.createElement("div")
+                     ? "wheel" : document.onmousewheel !== undefined
+                     ? "mousewheel"
+                     : "DOMMouseScroll";
 
     /**
      * panZoom
@@ -143,28 +144,43 @@
             e.preventDefault();
         }
 
+        /**
+         * mousePos
+         * Returns the mouse point coordinates.
+         *
+         * @name mousePos
+         * @function
+         * @param {Event} e The mouse event.
+         * @param {Boolean} rel If `true`, the relative coordinates will be returned instead.
+         * @return {Object} An object containing the relative coordinates.
+         */
+        function mousePos(e, rel) {
+            var bbox = self.bbox();
+            var abs = {
+                x: e.clientX || e.touches[0].pageX,
+                y: e.clientY || e.touches[0].pageY
+            };
+            if (!rel) { return abs; }
+            return {
+                x: abs.x - bbox.x,
+                y: abs.y - bbox.y
+            };
+        }
+
         // The event listeners
         var EventListeners = {
             mouse_down: function (e) {
                 pz.pan.mousedown = true;
-                pz.pan.iPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                pz.pan.iPos = mousePos(e);
             },
             mouse_up: function (e) {
                 pz.pan.mousedown = false;
-                pz.pan.fPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                pz.pan.fPos = mousePos(e);
                 pan();
             },
             mouse_move: function (e) {
-                pz.pan.fPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                if (!pz.pan.mousedown) { return; }
+                pz.pan.fPos = mousePos(e);
                 pan();
             },
             mouse_leave: function (e) {
@@ -185,6 +201,7 @@
           ;
 
         self.on(mousewheel, zoom);
+        return self;
     }
 
     // Extend the SVG.Element with the new function
