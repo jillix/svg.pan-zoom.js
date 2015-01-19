@@ -17,7 +17,6 @@
                      ? "wheel" : document.onmousewheel !== undefined
                      ? "mousewheel"
                      : "DOMMouseScroll";
-
     /**
      * panZoom
      * The pan-zoom contructor.
@@ -73,7 +72,6 @@
          * @return {undefined}
          */
         function updateMatrix() {
-            // matrix(0.5555555159659709,0,0,0.5555555159659709,190.00000406189127,200.99999785920562)
             self.attr("transform", "matrix(" + [
                 pz.transform.scaleX,
                 0, 0,
@@ -116,6 +114,7 @@
          * @return {undefined}
          */
         function zoom (e) {
+
             // Get the relative mouse point
             var rP = mousePos(e, true);
             var oX = rP.x;
@@ -124,8 +123,8 @@
             // Compute the new scale
             var d = e.deltaY / 1000;
             var tr = pz.transform = self.transform();
-            var scale = tr.scaleX + d;
-            console.log(rP);
+            var scale = tr.scaleX + (tr.scaleX * d);
+
             var scaleD = scale / tr.scaleX;
 
             // Get the current x, y
@@ -133,10 +132,8 @@
             var currentY = tr.y;
 
             // Compute the final x, y
-            //var x = scaleD * (currentX - oX) + oX;
-            //var y = scaleD * (currentY - oY) + oY;
-            var x = scaleD * (currentX - oX) + (oX - currentX) * scaleD;
-            var y = scaleD * (currentX - oY) + (oY - current) * scaleD;
+            var x = scaleD * (currentX - oX) + oX;
+            var y = scaleD * (currentY - oY) + oY;
 
             // Handle zoom restrictions
             if (scale > opt_options.zoom[1]) {
