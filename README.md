@@ -16,6 +16,7 @@ This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
     var markers = svg.group();
     var nodes = svg.group();
 
+    // Add draggable circles
     var g1 = nodes.group().translate(300, 200).draggable();
     g1.circle(80).fill("#C2185B");
 
@@ -25,6 +26,7 @@ This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
     var g3 = nodes.group().translate(200, 400).draggable();
     g3.circle(100).fill("#FF5252");
 
+    // Make the group pannable and zoomable
     nodes.panZoom();
 </script>
 ```
