@@ -217,7 +217,7 @@
           ;
 
         self.on(mousewheel, zoom);
-        return self;
+        return pz;
     }
 
     // Extend the SVG.Element with the new function
