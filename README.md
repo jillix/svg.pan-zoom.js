@@ -2,7 +2,7 @@ svg.pan-zoom.js
 ===============
 A JavaScript library for panning and zooming SVG things.
 
-[![](http://i.imgur.com/VPZjM3v.png)](http://jillix.github.io/svg.pan-zoom.js/)
+[![](http://i.imgur.com/R5TRDGU.png)](http://jillix.github.io/svg.pan-zoom.js/)
 
 ## Usage
 This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
@@ -16,6 +16,7 @@ This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
     var markers = svg.group();
     var nodes = svg.group();
 
+    // Add draggable circles
     var g1 = nodes.group().translate(300, 200).draggable();
     g1.circle(80).fill("#C2185B");
 
@@ -25,6 +26,7 @@ This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
     var g3 = nodes.group().translate(200, 400).draggable();
     g3.circle(100).fill("#FF5252");
 
+    // Make the group pannable and zoomable
     nodes.panZoom();
 </script>
 ```
@@ -44,15 +46,6 @@ The pan-zoom contructor.
  - `elm` (SVG): The selected element.
  - `pan` (Object): An object containing pan values.
  - `transform` (Object): An object containing the transform data (`scaleX`, `scaleY`, `x` and `y`).
-
-### `updateMatrix()`
-An internal function called to update the svg matrix.
-
-### `pan(e)`
-The internal function called for panning.
-
-#### Params
-- **Event** `e`: The internal listener event.
 
 ## How to contribute
 1. File an issue in the repository, using the bug tracker, describing the

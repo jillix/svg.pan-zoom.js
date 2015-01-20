@@ -68,7 +68,8 @@
     var markers = svg.group();
     var nodes = svg.group();
 
-    var g1 = nodes.group().translate(300, 200);
+    // Add draggable circles
+    var g1 = nodes.group().translate(300, 200).draggable();
     g1.circle(80).fill(&quot;#C2185B&quot;);
 
     var g2 = nodes.group().translate(100, 200);
@@ -77,6 +78,7 @@
     var g3 = nodes.group().translate(200, 400);
     g3.circle(100).fill(&quot;#FF5252&quot;);
 
+    // Make the group pannable and zoomable
     nodes.panZoom();
 &lt;/script&gt;</pre>
                 </div>

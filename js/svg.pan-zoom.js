@@ -13,10 +13,10 @@
     var container = null;
     var markers = null;
 
-    var mousewheel = "onwheel" in document.createElement("div") ? "wheel" :
-            document.onmousewheel !== undefined ? "mousewheel" :
-            "DOMMouseScroll";
-
+    var mousewheel = "onwheel" in document.createElement("div")
+                     ? "wheel" : document.onmousewheel !== undefined
+                     ? "mousewheel"
+                     : "DOMMouseScroll";
     /**
      * panZoom
      * The pan-zoom contructor.
@@ -63,7 +63,7 @@
         // Insert the rectangle
         self.parent.node.insertBefore(rect.node, self.node)
 
-        /**
+        /*!
          * updateMatrix
          * An internal function called to update the svg matrix.
          *
@@ -72,13 +72,16 @@
          * @return {undefined}
          */
         function updateMatrix() {
-            self.matrix([
-                pz.transform.scaleX, 0, 0,
-                pz.transform.scaleY, pz.transform.x, pz.transform.y
-            ].join(","));
+            self.attr("transform", "matrix(" + [
+                pz.transform.scaleX,
+                0, 0,
+                pz.transform.scaleY,
+                pz.transform.x,
+                pz.transform.y
+            ].join(",")+ ")");
         }
 
-        /**
+        /*!
          * pan
          * The internal function called for panning.
          *
@@ -92,8 +95,8 @@
                 return;
             }
             var tr = pz.transform = self.transform();
-            var diffX = (pz.pan.fPos.x - pz.pan.iPos.x) / (tr.scaleX + 1);
-            var diffY = (pz.pan.fPos.y - pz.pan.iPos.y) / (tr.scaleY + 1);
+            var diffX = pz.pan.fPos.x - pz.pan.iPos.x;
+            var diffY = pz.pan.fPos.y - pz.pan.iPos.y;
             tr.x += diffX;
             tr.y += diffY;
             pz.pan.iPos = pz.pan.fPos;
@@ -111,19 +114,30 @@
          * @return {undefined}
          */
         function zoom (e) {
-            var tr = pz.transform = self.transform();
-            var d = e.deltaY / 1000
-            var scale = tr.scaleX + d;
 
-            var oX = e.clientX;
-            var oY = e.clientY;
+            // Get the relative mouse point
+            var rP = mousePos(e, true);
+            var oX = rP.x;
+            var oY = rP.y;
+
+            e.deltaY = e.deltaY || e.wheelDeltaY;
+
+            // Compute the new scale
+            var d = e.deltaY / 1000;
+            var tr = pz.transform = self.transform();
+            var scale = tr.scaleX + (tr.scaleX * d);
 
             var scaleD = scale / tr.scaleX;
+
+            // Get the current x, y
             var currentX = tr.x;
             var currentY = tr.y;
+
+            // Compute the final x, y
             var x = scaleD * (currentX - oX) + oX;
             var y = scaleD * (currentY - oY) + oY;
 
+            // Handle zoom restrictions
             if (scale > opt_options.zoom[1]) {
                 scale = opt_options.zoom[1];
                 return;
@@ -134,37 +148,55 @@
                 return;
             }
 
+            // Zoom
             tr.scaleY = tr.scaleX = scale;
             tr.x = x;
             tr.y = y;
 
             self.node.dispatchEvent(new CustomEvent("zoom", e, tr));
             updateMatrix();
+
+            // Prevent the default browser behavior
             e.preventDefault();
+        }
+
+        /*!
+         * mousePos
+         * Returns the mouse point coordinates.
+         *
+         * @name mousePos
+         * @function
+         * @param {Event} e The mouse event.
+         * @param {Boolean} rel If `true`, the relative coordinates will be returned instead.
+         * @return {Object} An object containing the relative coordinates.
+         */
+        function mousePos(e, rel) {
+            var bbox = self.bbox();
+            var abs = {
+                x: e.clientX || e.touches[0].pageX,
+                y: e.clientY || e.touches[0].pageY
+            };
+            if (!rel) { return abs; }
+            return {
+                x: abs.x - bbox.x,
+                y: abs.y - bbox.y
+            };
         }
 
         // The event listeners
         var EventListeners = {
             mouse_down: function (e) {
                 pz.pan.mousedown = true;
-                pz.pan.iPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                pz.pan.iPos = mousePos(e);
             },
             mouse_up: function (e) {
                 pz.pan.mousedown = false;
-                pz.pan.fPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                pz.pan.fPos = mousePos(e);
                 pan();
             },
             mouse_move: function (e) {
-                pz.pan.fPos = {
-                    x: e.clientX || e.touches[0].pageX,
-                    y: e.clientY || e.touches[0].pageY
-                };
+                if (!pz.pan.mousedown) { return; }
+                pz.pan.fPos = mousePos(e);
                 pan();
             },
             mouse_leave: function (e) {
@@ -185,6 +217,7 @@
           ;
 
         self.on(mousewheel, zoom);
+        return pz;
     }
 
     // Extend the SVG.Element with the new function
