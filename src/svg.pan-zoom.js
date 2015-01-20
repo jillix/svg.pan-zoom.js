@@ -120,6 +120,8 @@
             var oX = rP.x;
             var oY = rP.y;
 
+            e.deltaY = e.deltaY || e.wheelDeltaY;
+
             // Compute the new scale
             var d = e.deltaY / 1000;
             var tr = pz.transform = self.transform();
