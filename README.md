@@ -47,6 +47,26 @@ The pan-zoom contructor.
  - `pan` (Object): An object containing pan values.
  - `transform` (Object): An object containing the transform data (`scaleX`, `scaleY`, `x` and `y`).
 
+### `setPosition(x, y, z)`
+Sets the graph position programatically.
+
+#### Params
+- **Number** `x`: The relative position to the svg document (on x axis).
+- **Number** `y`: The relative position to the svg document (on y axis).
+- **Number** `z`: The zoom value which will be handled as `scale` internally.
+
+#### Return
+- **PanZoom** The `PanZoom` instance.
+
+### `zoom(z)`
+Zooms in/out the graph programatically.
+
+#### Params
+- **Number** `z`: The zoom value which will be handled as `scale` internally.
+
+#### Return
+- **PanZoom** The `PanZoom` instance.
+
 ## How to contribute
 1. File an issue in the repository, using the bug tracker, describing the
    contribution you'd like to make. This will help us to get you started on the
