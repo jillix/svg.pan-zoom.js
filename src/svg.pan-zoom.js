@@ -5,18 +5,20 @@
  * A JavaScript library for pan and zoom SVG things.
  * Created with <3 and JavaScript by the jillix developers.
  *
- * svg.pan-zoom.js 1.0.0
+ * svg.pan-zoom.js 1.1.0
  * Licensed under the MIT license.
  * */
 ;(function() {
 
-    var container = null;
-    var markers = null;
+    var container = null
+      , markers = null
+      , mousewheel = "onwheel" in document.createElement("div")
+      ? "wheel"
+      : document.onmousewheel !== undefined
+      ? "mousewheel"
+      : "DOMMouseScroll"
+      ;
 
-    var mousewheel = "onwheel" in document.createElement("div")
-                     ? "wheel" : document.onmousewheel !== undefined
-                     ? "mousewheel"
-                     : "DOMMouseScroll";
     /**
      * panZoom
      * The pan-zoom contructor.
@@ -39,28 +41,53 @@
         // Selected element
         var self = this;
 
+
+        /**
+         * setPosition
+         * Sets the graph position programatically.
+         *
+         * @name setPosition
+         * @function
+         * @param {Number} x The relative position to the svg document (on x axis).
+         * @param {Number} y The relative position to the svg document (on y axis).
+         * @param {Number} z The zoom value which will be handled as `scale` internally.
+         * @return {PanZoom} The `PanZoom` instance.
+         */
+        function setPosition(x, y, z) {
+            pz.pan.iPos = pz.pan.fPos;
+            pz.transform = self.transform();
+            pz.transform.x = x;
+            pz.transform.y = y;
+            if (typeof z === "number") {
+                pz.zoom(z);
+            } else {
+                updateMatrix();
+            }
+            return pz;
+        }
+
+        /**
+         * doZoom
+         * Zooms in/out the graph programatically.
+         *
+         * @name doZoom
+         * @function
+         * @param {Number} z The zoom value which will be handled as `scale` internally.
+         * @return {PanZoom} The `PanZoom` instance.
+         */
+        function doZoom(z) {
+            pz.transform = self.transform();
+            pz.transform.scaleY = pz.transform.scaleX = z;
+            updateMatrix();
+            return pz;
+        }
+
         // Pan zoom object
         var pz = {
-            pan: {},
-            elm: self,
-            setPosition: function (x, y, z) {
-                pz.pan.iPos = pz.pan.fPos;
-                pz.transform = self.transform();
-                pz.transform.x = x;
-                pz.transform.y = y;
-                if (typeof z === "number") {
-                    pz.zoom(z);
-                } else {
-                    updateMatrix();
-                }
-                return pz;
-            },
-            zoom: function (z) {
-                pz.transform = self.transform();
-                pz.transform.scaleY = pz.transform.scaleX = z;
-                updateMatrix();
-                return pz;
-            }
+            pan: {}
+          , elm: self
+          , setPosition: setPosition
+          , zoom: doZoom
         };
 
         // Set options
@@ -79,7 +106,7 @@
         }).style("pointer-events", "all");
 
         // Insert the rectangle
-        self.parent.node.insertBefore(rect.node, self.node)
+        self.parent.node.insertBefore(rect.node, self.node);
 
         /*!
          * updateMatrix
@@ -131,26 +158,27 @@
         function zoom (e) {
 
             // Get the relative mouse point
-            var rP = mousePos(e, true);
-            var oX = rP.x;
-            var oY = rP.y;
+            var rP = mousePos(e, true)
+              , oX = rP.x
+              , oY = rP.y
+              ;
 
             e.deltaY = e.deltaY || e.wheelDeltaY;
 
             // Compute the new scale
-            var d = e.deltaY / 1000;
-            var tr = pz.transform = self.transform();
-            var scale = tr.scaleX + (tr.scaleX * d);
+            var d = e.deltaY / 1000
+              , tr = pz.transform = self.transform()
+              , scale = tr.scaleX + (tr.scaleX * d)
+              , scaleD = scale / tr.scaleX
 
-            var scaleD = scale / tr.scaleX;
+                // Get the current x, y
+              , currentX = tr.x
+              , currentY = tr.y
 
-            // Get the current x, y
-            var currentX = tr.x;
-            var currentY = tr.y;
-
-            // Compute the final x, y
-            var x = scaleD * (currentX - oX) + oX;
-            var y = scaleD * (currentY - oY) + oY;
+                // Compute the final x, y
+              , x = scaleD * (currentX - oX) + oX
+              , y = scaleD * (currentY - oY) + oY
+              ;
 
             // Handle zoom restrictions
             if (scale > opt_options.zoom[1]) {
@@ -188,13 +216,13 @@
         function mousePos(e, rel) {
             var bbox = self.bbox();
             var abs = {
-                x: e.clientX || e.touches[0].pageX,
-                y: e.clientY || e.touches[0].pageY
+                x: e.clientX || e.touches[0].pageX
+              , y: e.clientY || e.touches[0].pageY
             };
             if (!rel) { return abs; }
             return {
-                x: abs.x - bbox.x,
-                y: abs.y - bbox.y
+                x: abs.x - bbox.x
+              , y: abs.y - bbox.y
             };
         }
 
@@ -203,18 +231,18 @@
             mouse_down: function (e) {
                 pz.pan.mousedown = true;
                 pz.pan.iPos = mousePos(e);
-            },
-            mouse_up: function (e) {
+            }
+          , mouse_up: function (e) {
                 pz.pan.mousedown = false;
                 pz.pan.fPos = mousePos(e);
                 pan();
-            },
-            mouse_move: function (e) {
+            }
+          , mouse_move: function (e) {
                 if (!pz.pan.mousedown) { return; }
                 pz.pan.fPos = mousePos(e);
                 pan();
-            },
-            mouse_leave: function (e) {
+            }
+          , mouse_leave: function (e) {
                 pz.pan.mousedown = false;
             }
         };
