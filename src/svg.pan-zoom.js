@@ -76,6 +76,13 @@
          * @return {PanZoom} The `PanZoom` instance.
          */
         function zoom(z) {
+            if (typeof z === "number") {
+                pz.transform = self.transform();
+                pz.transform.scaleY = pz.transform.scaleX = z;
+                updateMatrix();
+                return pz;
+            }
+
             pz.transform = self.transform();
             pz.transform.scaleY = pz.transform.scaleX = z;
             updateMatrix();
@@ -100,9 +107,9 @@
 
         // Create the rectangle
         var rect = new SVG(document.createDocumentFragment()).rect().attr({
-            width: svg.width(),
-            height: svg.height(),
-            fill: "none"
+            width: svg.width()
+          , height: svg.height()
+          , fill: "none"
         }).style("pointer-events", "all");
 
         // Insert the rectangle
@@ -118,11 +125,11 @@
          */
         function updateMatrix() {
             self.attr("transform", "matrix(" + [
-                pz.transform.scaleX,
-                0, 0,
-                pz.transform.scaleY,
-                pz.transform.x,
-                pz.transform.y
+                pz.transform.scaleX
+              , 0, 0
+              , pz.transform.scaleY
+              , pz.transform.x
+              , pz.transform.y
             ].join(",")+ ")");
         }
 
@@ -144,6 +151,30 @@
             var diffY = pz.pan.fPos.y - pz.pan.iPos.y;
             pz.setPosition(tr.x + diffX, tr.y + diffY);
             self.node.dispatchEvent(new CustomEvent("pan", e, tr));
+        }
+
+        /*!
+         * mousePos
+         * Returns the mouse point coordinates.
+         *
+         * @name mousePos
+         * @function
+         * @param {Event} e The mouse event.
+         * @param {Boolean} rel If `true`, the relative coordinates will be returned instead.
+         * @return {Object} An object containing the relative coordinates.
+         */
+        function mousePos(e, rel) {
+            var bbox = self.parent.node.getBoundingClientRect()
+              , abs = {
+                    x: e.clientX || e.touches[0].pageX
+                  , y: e.clientY || e.touches[0].pageY
+                }
+              ;
+            if (!rel) { return abs; }
+            return {
+                x: abs.x - bbox.left
+              , y: abs.y - bbox.top
+            };
         }
 
         /*!
@@ -201,29 +232,6 @@
 
             // Prevent the default browser behavior
             e.preventDefault();
-        }
-
-        /*!
-         * mousePos
-         * Returns the mouse point coordinates.
-         *
-         * @name mousePos
-         * @function
-         * @param {Event} e The mouse event.
-         * @param {Boolean} rel If `true`, the relative coordinates will be returned instead.
-         * @return {Object} An object containing the relative coordinates.
-         */
-        function mousePos(e, rel) {
-            var bbox = self.bbox();
-            var abs = {
-                x: e.clientX || e.touches[0].pageX
-              , y: e.clientY || e.touches[0].pageY
-            };
-            if (!rel) { return abs; }
-            return {
-                x: abs.x - bbox.x
-              , y: abs.y - bbox.y
-            };
         }
 
         // The event listeners
