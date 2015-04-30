@@ -4,12 +4,23 @@ A JavaScript library for panning and zooming SVG things.
 
 [![](http://i.imgur.com/jbJJFHE.jpg)](http://jillix.github.io/svg.pan-zoom.js/)
 
+## Available on CDN!
+
+[**CDNJS** kindly hosts this library](https://cdnjs.com/libraries/svg.pan-zoom.js). You can use the cdn version:
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.pan-zoom.js/1.0.1/svg.pan-zoom.min.js"></script>
+```
+
 ## Usage
 This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
 
 ```html
 <script src="path/to/svg.js"></script>
 <script src="path/to/svg.pan-zoom.js"></script>
+<!-- Or from cdn
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.pan-zoom.js/1.0.1/svg.pan-zoom.min.js"></script>
+-->
 <script>
     var svg = new SVG($(".graph").get(0)).size("100%", 900);
     var links = svg.group();
