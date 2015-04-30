@@ -150,7 +150,7 @@
             var diffX = pz.pan.fPos.x - pz.pan.iPos.x;
             var diffY = pz.pan.fPos.y - pz.pan.iPos.y;
             pz.setPosition(tr.x + diffX, tr.y + diffY);
-            self.node.dispatchEvent(new CustomEvent("pan", e, tr));
+            self.node.dispatchEvent(new CustomEvent("pan", { detail: { e: e, tr: tr } }));
         }
 
         /*!
@@ -227,7 +227,7 @@
             tr.x = x;
             tr.y = y;
 
-            self.node.dispatchEvent(new CustomEvent("zoom", e, tr));
+            self.node.dispatchEvent(new CustomEvent("zoom", { detail: { e: e, tr: tr } }));
             updateMatrix();
 
             // Prevent the default browser behavior
