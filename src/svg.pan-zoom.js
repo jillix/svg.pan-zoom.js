@@ -5,7 +5,7 @@
  * A JavaScript library for pan and zoom SVG things.
  * Created with <3 and JavaScript by the jillix developers.
  *
- * svg.pan-zoom.js 1.0.1
+ * svg.pan-zoom.js 1.0.0
  * Licensed under the MIT license.
  * */
 ;(function() {
@@ -42,7 +42,25 @@
         // Pan zoom object
         var pz = {
             pan: {},
-            elm: self
+            elm: self,
+            setPosition: function (x, y, z) {
+                pz.pan.iPos = pz.pan.fPos;
+                pz.transform = self.transform();
+                pz.transform.x = x;
+                pz.transform.y = y;
+                if (typeof z === "number") {
+                    pz.zoom(z);
+                } else {
+                    updateMatrix();
+                }
+                return pz;
+            },
+            zoom: function (z) {
+                pz.transform = self.transform();
+                pz.transform.scaleY = pz.transform.scaleX = z;
+                updateMatrix();
+                return pz;
+            }
         };
 
         // Set options
@@ -97,11 +115,8 @@
             var tr = pz.transform = self.transform();
             var diffX = pz.pan.fPos.x - pz.pan.iPos.x;
             var diffY = pz.pan.fPos.y - pz.pan.iPos.y;
-            tr.x += diffX;
-            tr.y += diffY;
-            pz.pan.iPos = pz.pan.fPos;
+            pz.setPosition(tr.x + diffX, tr.y + diffY);
             self.node.dispatchEvent(new CustomEvent("pan", e, tr));
-            updateMatrix();
         }
 
         /*!
