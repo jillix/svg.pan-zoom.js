@@ -67,15 +67,15 @@
         }
 
         /**
-         * doZoom
+         * zoom
          * Zooms in/out the graph programatically.
          *
-         * @name doZoom
+         * @name zoom
          * @function
          * @param {Number} z The zoom value which will be handled as `scale` internally.
          * @return {PanZoom} The `PanZoom` instance.
          */
-        function doZoom(z) {
+        function zoom(z) {
             pz.transform = self.transform();
             pz.transform.scaleY = pz.transform.scaleX = z;
             updateMatrix();
@@ -87,7 +87,7 @@
             pan: {}
           , elm: self
           , setPosition: setPosition
-          , zoom: doZoom
+          , zoom: zoom
         };
 
         // Set options
@@ -155,7 +155,7 @@
          * @param {Event} e The internal listener event.
          * @return {undefined}
          */
-        function zoom (e) {
+        function doZoom (e) {
 
             // Get the relative mouse point
             var rP = mousePos(e, true)
@@ -249,7 +249,7 @@
 
         // Add event listeners
         rect
-          .on(mousewheel, zoom)
+          .on(mousewheel, doZoom)
           .on("mousedown", EventListeners.mouse_down)
           .on("touchstart", EventListeners.mouse_down)
           .on("mousemove", EventListeners.mouse_move)
@@ -259,7 +259,7 @@
           .on("mouseleave", EventListeners.mouse_leave)
           ;
 
-        self.on(mousewheel, zoom);
+        self.on(mousewheel, doZoom);
         return pz;
     }
 
