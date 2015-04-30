@@ -2,7 +2,7 @@ svg.pan-zoom.js
 ===============
 A JavaScript library for panning and zooming SVG things.
 
-[![](http://i.imgur.com/R5TRDGU.png)](http://jillix.github.io/svg.pan-zoom.js/)
+[![](http://i.imgur.com/jbJJFHE.jpg)](http://jillix.github.io/svg.pan-zoom.js/)
 
 ## Usage
 This library depends on the [SVG.js](https://github.com/wout/svg.js) library.
