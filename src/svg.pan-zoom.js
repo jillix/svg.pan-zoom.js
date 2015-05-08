@@ -5,7 +5,7 @@
  * A JavaScript library for pan and zoom SVG things.
  * Created with <3 and JavaScript by the jillix developers.
  *
- * svg.pan-zoom.js 2.1.0
+ * svg.pan-zoom.js 2.2.0
  * Licensed under the MIT license.
  * */
 ;(function() {
@@ -28,6 +28,7 @@
      * @param {Object|undefined} opt_options An optional object containing the following fields:
      *
      *  - `zoom` (Array): An array of two float values: the minimum and maximum zoom values (default: `undefined`).
+     *  - `zoomSpeed` (Number): The zoom speed (default: `-1`). By changing the sign the zoom is reversed.
      *
      * @return {PanZoom} The PanZoom object containing the following fields:
      *
@@ -40,7 +41,6 @@
 
         // Selected element
         var self = this;
-
 
         /**
          * setPosition
@@ -100,6 +100,7 @@
         // Set options
         opt_options = Object(opt_options);
         opt_options.zoom = opt_options.zoom || [];
+        opt_options.zoomSpeed = typeof opt_options.zoomSpeed === "number" ? opt_options.zoomSpeed : -1;
 
         // Get the svg document
         var svg = self;
@@ -197,7 +198,7 @@
             e.deltaY = e.deltaY || e.wheelDeltaY;
 
             // Compute the new scale
-            var d = e.deltaY / 1000
+            var d = opt_options.zoomSpeed * e.deltaY / 1000
               , tr = pz.transform = self.transform()
               , scale = tr.scaleX + (tr.scaleX * d)
               , scaleD = scale / tr.scaleX
