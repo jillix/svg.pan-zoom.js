@@ -51,6 +51,7 @@ The pan-zoom contructor.
 #### Params
 - **Object** `opt_options`: An optional object containing the following fields:
  - `zoom` (Array): An array of two float values: the minimum and maximum zoom values (default: `undefined`).
+ - `zoomSpeed` (Number): The zoom speed (default: `-1`). By changing the sign the zoom is reversed.
 
 #### Return
 - **PanZoom** The PanZoom object containing the following fields:
