@@ -104,7 +104,7 @@
 
         // Get the svg document
         var svg = self;
-        while ((svg = self.parent).node.tagName.toUpperCase() !== "SVG") {}
+        while ((svg = self.parent()).node.tagName.toUpperCase() !== "SVG") {}
 
         // Create the rectangle
         var rect = new SVG(document.createDocumentFragment()).rect().attr({
@@ -114,7 +114,7 @@
         }).style("pointer-events", "all");
 
         // Insert the rectangle
-        self.parent.node.insertBefore(rect.node, self.node);
+        self.parent().node.insertBefore(rect.node, self.node);
 
         /*!
          * updateMatrix
@@ -165,7 +165,7 @@
          * @return {Object} An object containing the relative coordinates.
          */
         function mousePos(e, rel) {
-            var bbox = self.parent.node.getBoundingClientRect()
+            var bbox = self.parent().node.getBoundingClientRect()
               , abs = {
                     x: e.clientX || e.touches[0].pageX
                   , y: e.clientY || e.touches[0].pageY
