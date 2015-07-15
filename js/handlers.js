@@ -4,7 +4,7 @@ $(document).ready(function () {
     var markers = svg.group();
     var nodes = svg.group();
 
-    var g1 = nodes.group().translate(300, 200);
+    var g1 = nodes.group().translate(300, 200).draggy();
     g1.circle(80).fill("#C2185B");
 
     var g2 = nodes.group().translate(100, 200);

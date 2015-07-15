@@ -23,13 +23,13 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
-
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
     <!-- svg.js -->
     <script src="js/svg.js"></script>
     <script src="js/svg.pan-zoom.js"></script>
+    <script src="js/svg.draggy.js"></script>
 
     <script src="js/handlers.js"></script>
 </head>
@@ -61,6 +61,7 @@
                 <div class="col-lg-6">
                     <pre>&lt;script src=&quot;path/to/svg.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;path/to/svg.pan-zoom.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/svg.draggy.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
     var svg = new SVG($(&quot;.graph&quot;).get(0)).size(&quot;100%&quot;, 900);
     var links = svg.group();
@@ -68,7 +69,7 @@
     var nodes = svg.group();
 
     // Add draggable circles
-    var g1 = nodes.group().translate(300, 200).draggable();
+    var g1 = nodes.group().translate(300, 200).draggy();
     g1.circle(80).fill(&quot;#C2185B&quot;);
 
     var g2 = nodes.group().translate(100, 200);
