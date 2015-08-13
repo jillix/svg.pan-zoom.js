@@ -83,14 +83,14 @@ Sets the graph position programatically.
 #### Return
 - **PanZoom** The `PanZoom` instance.
 
-### `zoom(z, oX, oY, oY)`
+### `zoom(z, oX, oY, ev)`
 Zooms in/out the graph programatically.
 
 #### Params
 - **Number** `z`: The zoom value which will be handled as `scale` internally.
 - **Number** `oX`: An optional origin point `x` coordinate.
 - **Number** `oY`: An optional origin point `y` coordinate.
-- **Event** `oY`: An optional event value. If provided, the `zoom` event will be triggered.
+- **Event** `ev`: An optional event object. If provided, the `zoom` event will be triggered.
 
 #### Return
 - **PanZoom** The `PanZoom` instance.
@@ -102,5 +102,4 @@ Have an idea? Found a bug? See [how to contribute][contributing].
 See the [LICENSE](/LICENSE) file.
 
 [contributing]: /CONTRIBUTING.md
-[website]: http://ionicabizau.net
 [docs]: /DOCUMENTATION.md

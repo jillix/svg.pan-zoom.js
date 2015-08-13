@@ -5,7 +5,7 @@
  * A JavaScript library for pan and zoom SVG things.
  * Created with <3 and JavaScript by the jillix developers.
  *
- * svg.pan-zoom.js 2.2.0
+ * svg.pan-zoom.js 2.4.1
  * Licensed under the MIT license.
  * */
 ;(function() {
@@ -75,7 +75,7 @@
          * @param {Number} z The zoom value which will be handled as `scale` internally.
          * @param {Number} oX An optional origin point `x` coordinate.
          * @param {Number} oY An optional origin point `y` coordinate.
-         * @param {Event} oY An optional event value. If provided, the `zoom` event will be triggered.
+         * @param {Event} ev An optional event object. If provided, the `zoom` event will be triggered.
          * @return {PanZoom} The `PanZoom` instance.
          */
         function zoom(z, oX, oY, ev) {
