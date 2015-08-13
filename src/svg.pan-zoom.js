@@ -77,7 +77,7 @@
          */
         function zoom(z) {
             if (typeof z === "number") {
-                pz.transform = self.transform();
+                pz.transform = pz.transform || self.transform();
                 pz.transform.scaleY = pz.transform.scaleX = z;
                 updateMatrix();
                 return pz;
