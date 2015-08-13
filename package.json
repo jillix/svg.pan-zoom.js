@@ -1,6 +1,6 @@
 {
   "name": "svg.pan-zoom.js",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "A JavaScript library for panning and zooming SVG things.",
   "main": "src/svg.pan-zoom.js",
   "scripts": {
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/jillix/svg.pan-zoom.js/issues"
   },
-  "homepage": "https://github.com/jillix/svg.pan-zoom.js"
+  "homepage": "https://github.com/jillix/svg.pan-zoom.js",
+  "blah": {
+    "ex_img": "http://i.imgur.com/jbJJFHE.jpg"
+  }
 }

@@ -5,7 +5,7 @@
  * A JavaScript library for pan and zoom SVG things.
  * Created with <3 and JavaScript by the jillix developers.
  *
- * svg.pan-zoom.js 2.4.1
+ * svg.pan-zoom.js 2.6.0
  * Licensed under the MIT license.
  * */
 ;(function() {
