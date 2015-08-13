@@ -73,6 +73,9 @@
          * @name zoom
          * @function
          * @param {Number} z The zoom value which will be handled as `scale` internally.
+         * @param {Number} oX An optional origin point `x` coordinate.
+         * @param {Number} oY An optional origin point `y` coordinate.
+         * @param {Event} oY An optional event value. If provided, the `zoom` event will be triggered.
          * @return {PanZoom} The `PanZoom` instance.
          */
         function zoom(z, oX, oY, ev) {
