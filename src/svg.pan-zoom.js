@@ -75,11 +75,37 @@
          * @param {Number} z The zoom value which will be handled as `scale` internally.
          * @return {PanZoom} The `PanZoom` instance.
          */
-        function zoom(z) {
-            pz.transform = pz.transform || self.transform();
-            pz.transform.scaleY = pz.transform.scaleX = z;
-            updateMatrix();
-            return pz;
+        function zoom(z, oX, oY, ev) {
+
+            // Handle zoom restrictions
+            if (z > opt_options.zoom[1] || z < opt_options.zoom[0]) {
+                return;
+            }
+
+            if (arguments.length === 1) {
+                pz.transform = pz.transform || self.transform();
+                pz.transform.scaleY = pz.transform.scaleX = z;
+                updateMatrix();
+                return pz;
+            }
+
+            var tr = pz.transform
+
+                // Get the current x, y
+              , currentX = tr.x
+              , currentY = tr.y
+              , scaleD = z / tr.scaleX
+
+                // Compute the final x, y
+              , x = scaleD * (currentX - oX) + oX
+              , y = scaleD * (currentY - oY) + oY
+              ;
+
+            setPosition(x, y, z);
+
+            if (ev) {
+                self.node.dispatchEvent(new CustomEvent("zoom", { detail: { e: ev, tr: tr } }));
+            }
         }
 
         // Pan zoom object
@@ -194,39 +220,14 @@
             var d = opt_options.zoomSpeed * e.deltaY / 1000
               , tr = pz.transform = self.transform()
               , scale = tr.scaleX + (tr.scaleX * d)
-              , scaleD = scale / tr.scaleX
-
-                // Get the current x, y
-              , currentX = tr.x
-              , currentY = tr.y
-
-                // Compute the final x, y
-              , x = scaleD * (currentX - oX) + oX
-              , y = scaleD * (currentY - oY) + oY
               ;
 
-            // Handle zoom restrictions
-            if (scale > opt_options.zoom[1]) {
-                scale = opt_options.zoom[1];
-                return;
-            }
-
-            if (scale < opt_options.zoom[0]) {
-                scale = opt_options.zoom[0];
-                return;
-            }
-
-            // Zoom
-            tr.scaleY = tr.scaleX = scale;
-            tr.x = x;
-            tr.y = y;
-
-            self.node.dispatchEvent(new CustomEvent("zoom", { detail: { e: e, tr: tr } }));
-            updateMatrix();
+            zoom(scale, oX, oY, e);
 
             // Prevent the default browser behavior
             e.preventDefault();
         }
+
 
         // The event listeners
         var EventListeners = {
