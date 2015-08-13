@@ -76,14 +76,7 @@
          * @return {PanZoom} The `PanZoom` instance.
          */
         function zoom(z) {
-            if (typeof z === "number") {
-                pz.transform = pz.transform || self.transform();
-                pz.transform.scaleY = pz.transform.scaleX = z;
-                updateMatrix();
-                return pz;
-            }
-
-            pz.transform = self.transform();
+            pz.transform = pz.transform || self.transform();
             pz.transform.scaleY = pz.transform.scaleX = z;
             updateMatrix();
             return pz;
