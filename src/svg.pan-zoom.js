@@ -217,7 +217,7 @@
               , oY = rP.y
               ;
 
-            e.deltaY = e.deltaY || e.wheelDeltaY;
+            e.deltaY = e.deltaY || e.wheelDeltaY || -e.wheelDelta;
 
             // Compute the new scale
             var d = opt_options.zoomSpeed * e.deltaY / 1000
