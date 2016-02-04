@@ -92,7 +92,7 @@
                 return pz;
             }
 
-            var tr = pz.transform
+            var tr = pz.transform || self.transform()
 
                 // Get the current x, y
               , currentX = tr.x
